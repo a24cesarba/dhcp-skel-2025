@@ -7,8 +7,9 @@ services:
         ipv4_address: 192.168.130.2
     cap_add:
       - NET_ADMIN
-    restart: unless-stopped
-
+    volumes:
+      - ./kea/kea-dhcp4.conf.json:/etc/kea/kea-dhcp4.conf
+  
   cliente1:
     build: ./cliente
     container_name: client1

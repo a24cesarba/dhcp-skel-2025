@@ -8,8 +8,9 @@
       "lfc-interval": 0
     },
     "valid-lifetime": 600,
-    "renew-timer": 300,
     "rebind-timer": 500,
-    "authoritative": true
+    "authoritative": true,
+    "renew-timer": 300
+    
   }
 }
