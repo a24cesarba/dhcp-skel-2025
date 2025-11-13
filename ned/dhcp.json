@@ -1,0 +1,88 @@
+{
+  "Dhcp4": {
+    "interfaces-config": {
+      "interfaces": [
+        "eth0"
+      ]
+    },
+    "lease-database": {
+      "type": "memfile",
+      "persist": true,
+      "name": "/var/lib/kea/kea-leases4.csv",
+      "lfc-interval": 30,
+      "max-row-errors": 100
+    },
+    "subnet4": [
+      {
+        "id": 1,
+        "pools": [
+          {
+            "pool": "192.168.10.30 - 192.168.10.32",
+            "option-data": [
+              {
+                "name": "routers",
+                "data": "192.168.10.253"
+              }
+            ]
+          },
+          {
+            "pool": "192.168.10.101-192.168.10.230"
+          }
+        ],
+        "subnet": "192.168.10.0/24",
+        "option-data": [
+          {
+            "name": "routers",
+            "data": "192.168.10.254"
+          }
+        ],
+        "reservations": [
+          {
+            "hw-address": "02:42:ac:11:00:14",
+            "ip-address": "192.168.10.30",
+            "option-data": [
+              {
+                "name": "routers",
+                "data": "192.168.10.252"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "pools": [
+          {
+            "pool": "192.168.11.30 - 192.168.11.132"
+          }
+        ],
+        "subnet": "192.168.11.0/24",
+        "option-data": [
+          {
+            "name": "routers",
+            "data": "192.168.11.254"
+          }
+        ]
+      },
+      {
+        "id": 3,
+        "pools": [
+          {
+            "pool": "192.168.12.30 - 192.168.12.132"
+          }
+        ],
+        "subnet": "192.168.12.0/24",
+        "option-data": [
+          {
+            "name": "routers",
+            "data": "192.168.12.254"
+          }
+        ]
+      }
+    ],
+    "valid-lifetime": 600,
+    "rebind-timer": 500,
+    "authoritative": true,
+    "renew-timer": 300
+  }
+}

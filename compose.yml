@@ -1,42 +1,131 @@
 services:
-  kea:
-    build: ./kea
-    container_name: kea
+  router:
+    build: ./router
+    hostname: router
     networks:
-      dhcp_lab:
-        ipv4_address: 192.168.130.2
+      rede_wan:
+        ipv4_address: 192.0.2.254  
+        interface_name: eth0  
+      rede_stark:
+        ipv4_address: 192.168.10.254
+        interface_name: eth1
+      rede_lannister:
+        ipv4_address: 192.168.11.254
+        interface_name: eth2
+      rede_targaryen:
+        ipv4_address: 192.168.12.254
+        interface_name: eth3
     cap_add:
       - NET_ADMIN
+  ned:
+    build: ./kea
+    hostname: ned
+    networks:
+      rede_stark:
+        ipv4_address: 192.168.10.10
+    cap_add:
+      - NET_ADMIN
+    entrypoint: "bash -c /sbin/entrypoint.sh"
     volumes:
-     - ./kea/kea-dhcp4.conf.json:/etc/kea/kea-dhcp4.conf
-    restart: unless-stopped
-
+      - ./ned/dhcp.json:/etc/kea/kea-dhcp4.conf
+      # - ./ned/dhcp:/var/lib/kea 
+      - ./ned/entrypoint.sh:/sbin/entrypoint.sh
+  
   cliente1:
     build: ./cliente
-    container_name: client1
+    hostname: client1
+    depends_on:
+      - ned
     networks:
-      dhcp_lab:
-        ipv4_address: 192.168.130.3
+      rede_stark:
         mac_address: 02:42:ac:11:00:10  # dirección HW fija
     cap_add:
       - NET_ADMIN
     command: >
-      sh -c "dhclient -v eth0 && sleep infinity"
+      sh -c "ip addr flush dev eth0 && dhclient -v eth0 && sleep infinity"
 
   cliente2:
     build: ./cliente
-
+    hostname: cliente2
+    depends_on:
+      - ned
     networks:
-      dhcp_lab:
-        ipv4_address: 192.168.130.4
+      rede_stark:
+        mac_address: 02:42:ac:11:00:11
+    cap_add:
+      - NET_ADMIN
+    command: > 
+      sh -c "ip addr flush dev eth0 && dhclient -v eth0 && sleep infinity"
+  cliente3:
+    build: ./cliente
+    hostname: cliente3
+    depends_on:
+      - ned
+    networks:
+      rede_stark:
+        mac_address: 02:42:ac:11:00:12
     cap_add:
       - NET_ADMIN
     command: >
-      sh -c "dhclient -v eth0 && sleep infinity"
-
+      sh -c "ip addr flush dev eth0 && dhclient -v eth0 && sleep infinity"
+  cliente4:
+    build: ./cliente
+    hostname: cliente4
+    depends_on:
+      - ned
+    networks:
+      rede_stark:
+        mac_address: 02:42:ac:11:00:13
+    cap_add:
+      - NET_ADMIN
+    command: >
+      sh -c "ip addr flush dev eth0 && dhclient -v eth0 && sleep infinity"  
+  cliente5:
+    build: ./cliente
+    hostname: cliente5
+    depends_on:
+      - ned
+      - cliente1
+      - cliente2
+      - cliente3
+      - cliente4      
+    networks:
+      rede_stark:
+        mac_address: 02:42:ac:11:00:14
+    cap_add:
+      - NET_ADMIN
+    command: >
+      sh -c "sleep 10 && ip addr flush dev eth0 && dhclient -v eth0 && sleep infinity"          
+  cliente10:
+    build: ./cliente
+    hostname: cliente10
+    depends_on:
+      - ned
+    networks:
+      rede_lannister:
+        mac_address: 02:42:ac:11:10:13
+    cap_add:
+      - NET_ADMIN
+    command: >
+      sh -c "ip addr flush dev eth0 && dhclient -v eth0 && sleep infinity"          
 networks:
-  dhcp_lab:
+  rede_stark:
     driver: bridge
     ipam:
       config:
-        - subnet: 192.168.130.0/24
+        - subnet: 192.168.10.0/24          
+  rede_lannister:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 192.168.11.0/24 
+  rede_targaryen:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 192.168.12.0/24               
+  rede_wan:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 192.0.2.0/24            
