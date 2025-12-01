@@ -34,8 +34,23 @@ services:
       sh -c "dhclient -v eth0 && sleep infinity"
 
 networks:
-  dhcp_lab:
+  rede_stark:
     driver: bridge
     ipam:
       config:
-        - subnet: 192.168.130.0/24
+        - subnet: 192.168.10.0/24
+  rede_lannister:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 192.168.11.0/24
+  rede_targaryen:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 192.168.12.0/24
+  rede_wan:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 192.0.2.0/24
