@@ -55,8 +55,46 @@ services:
   cliente2:
     build: ./cliente
     networks:
-      rede_lannister:
+      rede_stark:
         mac_address: 02:42:ac:11:00:11  # dirección HW fija
+    cap_add:
+      - NET_ADMIN
+    command: >
+      sh -c "dhclient -v eth0 && sleep infinity"
+  cliente3:
+    build: ./cliente
+    networks:
+      rede_stark:
+        mac_address: 02:42:ac:11:00:12  # dirección HW fija
+    cap_add:
+      - NET_ADMIN
+    command: >
+      sh -c "dhclient -v eth0 && sleep infinity"
+  cliente4:
+    build: ./cliente
+    networks:
+      rede_stark:
+        mac_address: 02:42:ac:11:00:13  # dirección HW fija
+    cap_add:
+      - NET_ADMIN
+    command: >
+      sh -c "dhclient -v eth0 && sleep infinity"
+  cliente10:
+    build: ./cliente
+    container_name: clientE1
+    networks:
+      rede_lannister:
+        mac_address: 02:42:ac:12:00:10  # dirección HW fija
+    cap_add:
+      - NET_ADMIN
+    command: >
+      sh -c "dhclient -v eth0 && sleep infinity"
+  cliente20:
+    build: ./cliente
+    container_name: clientE1
+    networks:
+      rede_targaryen:
+        mac_address: 02:42:ac:13:00:10  # dirección HW fija
     cap_add:
       - NET_ADMIN
     command: >

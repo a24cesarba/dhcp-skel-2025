@@ -1,16 +1,52 @@
 {
   "Dhcp4": {
     "interfaces-config": {
-      "interfaces": [ "eth0" ]
+      "interfaces": [
+        "eth0"
+      ],
+      "dhcp-socket-type": "raw"
     },
     "lease-database": {
       "type": "memfile",
-      "lfc-interval": 0
+      "persist": true,
+      "name": "/var/lib/kea/kea-leases4.csv",
+      "lfc-interval": 1800,
+      "max-row-errors": 100
     },
-    "valid-lifetime": 600,
-    "rebind-timer": 500,
-    "authoritative": true,
-    "renew-timer": 300
-    
+    "valid-lifetime": 4000,
+    "renew-timer": 1000,
+    "rebind-timer": 2000,
+    "subnet4": [
+      {
+        "id": 1,
+        "pools": [
+          {
+            "pool": "192.168.10.30 - 192.168.10.32"
+          },
+          {
+            "pool": "192.168.10.101 - 192.168.10.254"
+          }
+        ],
+        "subnet": "192.168.10.0/24"
+      },
+      {
+        "id": 2,
+        "pools": [
+          {
+            "pool": "192.168.11.100 - 192.168.11.254"
+          }
+        ],
+        "subnet": "192.168.11.0/24"
+      },
+      {
+        "id": 3,
+        "pools": [
+          {
+            "pool": "192.168.12.100 - 192.168.12.254"
+          }
+        ],
+        "subnet": "192.168.12.0/24"
+      }
+    ]
   }
 }
