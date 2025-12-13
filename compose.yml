@@ -1,21 +1,51 @@
 services:
+  router:
+    build: ./router
+    container_name: router
+    networks:
+      rede_wan:
+        ipv4_address: 192.0.2.254
+        interface_name: eth0
+      rede_stark:
+        ipv4_address: 192.168.10.254
+        interface_name: eth1
+      rede_lannister:
+        ipv4_address: 192.168.11.254
+        interface_name: eth2
+      rede_targaryen:
+        ipv4_address: 192.168.12.254
+        interface_name: eth3
+    cap_add:
+      - NET_ADMIN
   kea:
     build: ./kea
     container_name: kea
     networks:
-      dhcp_lab:
-        ipv4_address: 192.168.130.2
+      rede_stark:
+        ipv4_address: 192.168.10.2
     cap_add:
       - NET_ADMIN
     volumes:
       - ./kea/kea-dhcp4.conf.json:/etc/kea/kea-dhcp4.conf
+  arya:
+    build: ./dnsserver
+    container_name: arya
+    networks:
+      rede_stark:
+        ipv4_address: 192.168.10.11
+    cap_add:
+      - NET_ADMIN
+    volumes:
+      - ./dnsserver/named.conf.local:/etc/bind/named.conf.local
+      - ./dnsserver/named.conf.options:/etc/bind/named.conf.options
+      - ./dnsserver/zonas:/var/cache/bind/zonas
   
   cliente1:
     build: ./cliente
     container_name: client1
     networks:
-      dhcp_lab:
-        ipv4_address: 192.168.130.3
+      rede_stark:
+        ipv4_address: 192.168.10.3
         mac_address: 02:42:ac:11:00:10  # dirección HW fija
     cap_add:
       - NET_ADMIN
@@ -24,10 +54,9 @@ services:
 
   cliente2:
     build: ./cliente
-
     networks:
-      dhcp_lab:
-        ipv4_address: 192.168.130.4
+      rede_lannister:
+        ipv4_address: 192.168.11.4
     cap_add:
       - NET_ADMIN
     command: >
