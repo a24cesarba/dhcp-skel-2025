@@ -15,4 +15,4 @@ COPY entrypoint.sh /sbin/entrypoint.sh
 
 RUN chmod 777 /sbin/entrypoint.sh
 
-ENTRYPOINT [ "/sbin/entrypoint.sh" ]
+ENTRYPOINT ["/sbin/entrypoint.sh"]
