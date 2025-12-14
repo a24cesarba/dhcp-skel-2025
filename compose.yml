@@ -28,7 +28,9 @@ services:
     entrypoint: "bash -c /sbin/entrypoint.sh"
     volumes:
       - ./kea/entrypoint.sh:/sbin/entrypoint.sh
-      - ./ned/kea-dhcp4.conf.json:/etc/kea/kea-dhcp4.conf
+      - ./kea/dhcp4.conf:/etc/kea/dhcp4.conf
+      - ./kea/ddns.jsonc:/etc/kea/ddns.conf
+
   arya:
     build: ./dnsserver
     container_name: arya
@@ -40,15 +42,17 @@ services:
     volumes:
       - ./dnsserver/named.conf.local:/etc/bind/named.conf.local
       - ./dnsserver/named.conf.options:/etc/bind/named.conf.options
-      - ./dnsserver/zonas:/var/cache/bind/zonas
+      - ./dnsserver/zonas/:/var/cache/bind/zonas/
   cliente1:
     build: ./cliente
-    container_name: clientE1
+    container_name: cliente1
     networks:
       rede_stark:
         mac_address: 02:42:ac:11:00:10  # dirección HW fija
     cap_add:
       - NET_ADMIN
+    depends_on:
+      - ned
     command: >
       sh -c "dhclient -v eth0 && sleep infinity"
 
@@ -59,6 +63,8 @@ services:
         mac_address: 02:42:ac:11:00:11  # dirección HW fija
     cap_add:
       - NET_ADMIN
+    depends_on:
+      - ned
     command: >
       sh -c "dhclient -v eth0 && sleep infinity"
   cliente3:
@@ -68,6 +74,8 @@ services:
         mac_address: 02:42:ac:11:00:12  # dirección HW fija
     cap_add:
       - NET_ADMIN
+    depends_on:
+      - ned
     command: >
       sh -c "dhclient -v eth0 && sleep infinity"
   cliente4:
@@ -77,26 +85,32 @@ services:
         mac_address: 02:42:ac:11:00:13  # dirección HW fija
     cap_add:
       - NET_ADMIN
+    depends_on:
+      - ned
     command: >
       sh -c "dhclient -v eth0 && sleep infinity"
   cliente10:
     build: ./cliente
-    container_name: clientE1
+    container_name: cliente10
     networks:
       rede_lannister:
         mac_address: 02:42:ac:12:00:10  # dirección HW fija
     cap_add:
       - NET_ADMIN
+    depends_on:
+      - ned
     command: >
       sh -c "dhclient -v eth0 && sleep infinity"
   cliente20:
     build: ./cliente
-    container_name: clientE1
+    container_name: cliente20
     networks:
       rede_targaryen:
         mac_address: 02:42:ac:13:00:10  # dirección HW fija
     cap_add:
       - NET_ADMIN
+    depends_on:
+      - ned
     command: >
       sh -c "dhclient -v eth0 && sleep infinity"
 

@@ -1,25 +1,36 @@
+key "chave-actualizacion" {
+        algorithm hmac-sha256;
+        secret "kGbZchQMFYWYA4Mq/faOWfLOifGmYrwBp029JNa0Oo0=";
+};
+
 zone "stark.lan" {
 	type primary;
     file "zonas/db.stark";
+    allow-update {key "chave-actualizacion" ;};
 };
 zone "lannister.lan" {
 	type primary;
     file "zonas/db.lannister";
+    allow-update {key "chave-actualizacion" ;};
 };
 zone "targaryen.lan" {
 	type primary;
     file "zonas/db.targaryen";
+    allow-update {key "chave-actualizacion" ;};
 };
 
 zone "10.168.192.in-addr-arpa" {
 	type primary;
     file "zonas/db.10";
+    allow-update {key "chave-actualizacion" ;};
 };
 zone "11.168.192.in-addr-arpa" {
 	type primary;
     file "zonas/db.11";
+    allow-update {key "chave-actualizacion" ;};
 };
 zone "12.168.192.in-addr-arpa" {
 	type primary;
     file "zonas/db.12";
+    allow-update {key "chave-actualizacion" ;};
 };

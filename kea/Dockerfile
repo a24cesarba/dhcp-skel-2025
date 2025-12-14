@@ -10,7 +10,7 @@ RUN apt-get update && apt-get install -y \
         kea-dhcp4-server \
         && rm -rf /var/lib/apt/lists/*
 
-COPY kea-dhcp4.conf.json /etc/kea/kea-dhcp4.conf
+COPY dhcp4.conf /etc/kea/dhcp4.conf
 
 RUN mkdir -p /run/kea /var/run/kea /var/lib/kea && \
     touch /var/lib/kea/kea-leases4.csv && \
